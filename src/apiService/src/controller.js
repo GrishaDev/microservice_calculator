@@ -1,7 +1,7 @@
 const { HttpError } = require('./helpers/httpError');
 const { rabbitmqProduce } = require('./broker/rabbitmq');
 const Repository = require('./database/repository');
-
+const config = require('./config');
 class Controller {
 
     static async health(req, res) {
@@ -26,22 +26,22 @@ class Controller {
     }
 
     static async addAddition(req, res) {
-        const result = await createCalculation('new_addition', req.body);
+        const result = await createCalculation(config.additionQueue, req.body);
         res.json(result);
     }
 
     static async addSubtraction(req, res) {
-        const result = await createCalculation('new_subtraction', req.body);
+        const result = await createCalculation(config.subtractionQueue, req.body);
         res.json(result);
     }
 
     static async addMultiplication(req, res) {
-        const result = await createCalculation('new_multiplication', req.body);
+        const result = await createCalculation(config.multiplicationQueue, req.body);
         res.json(result);
     }
 
     static async addDivision(req, res) {
-        const result = await createCalculation('new_division', req.body);
+        const result = await createCalculation(config.divisionQueue, req.body);
         res.json(result);
     }
 }

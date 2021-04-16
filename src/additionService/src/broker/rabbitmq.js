@@ -1,8 +1,10 @@
 const rabbitmq = require('amqplib');
-const Repository = require('../database/repository');
+const calculate = require('../app');
 const config = require('../config');
+const sleep = require('../utils/sleep');
 
 const resultsQueue = config.resultsQueue;
+const serviceQueue = config.serviceQueue;
 let connection;
 let channel;
 
@@ -10,13 +12,17 @@ const connectRabbitmq = async () => {
     connection = await rabbitmq.connect(config.brokerUrl);
     channel = await connection.createChannel();
 
-    await channel.assertQueue (resultsQueue, {durable: true});
+    await channel.assertQueue (serviceQueue, {durable: true});
 
-    channel.consume(resultsQueue, async (msg) => {
+    channel.consume(serviceQueue, async (msg) => {
         console.log('consume');
         const msgParsed = JSON.parse(msg.content.toString());
         const { calcId, data } = msgParsed;
-        await Repository.updateCalculation(calcId, data);
+        const { number1, number2 } = data;
+        await sleep(5000);
+        const result = calculate(number1, number2);
+        const calculatedData = {calcId, data: {result, operationType: 'addition'}}
+        await rabbitmqProduce(resultsQueue, calculatedData)
         channel.ack(msg);
     })
 }
