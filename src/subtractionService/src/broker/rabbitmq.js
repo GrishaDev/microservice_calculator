@@ -2,6 +2,7 @@ const rabbitmq = require('amqplib');
 const calculate = require('../app');
 const config = require('../config');
 const sleep = require('../utils/sleep');
+const { logInfo } = require('../helpers/produceLog');
 
 const resultsQueue = config.resultsQueue;
 const serviceQueue = config.serviceQueue;
@@ -23,6 +24,7 @@ const connectRabbitmq = async () => {
         const { number1, number2 } = data;
         await sleep(5000);
         const result = calculate(number1, number2);
+        logInfo(`${calcId} calculated with result: ${result} on operationType: ${config.serviceType}`);
         const calculatedData = {calcId, data: {result, operationType: config.serviceType}}
         await rabbitmqProduce(resultsQueue, calculatedData)
         channel.ack(msg);

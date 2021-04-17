@@ -18,6 +18,13 @@ services:
         ports:
             - "6200:6200"
 
+    logger:
+        build: src/loggerService/.
+        env_file: src/loggerService/.env
+        restart: unless-stopped
+        ports:
+            - "7000:7000"
+
     addition:
         build: src/additionService/.
         env_file: src/additionService/.env
@@ -48,11 +55,12 @@ services:
 
     rabbitmq:
         image: 'bitnami/rabbitmq:latest'
+        env_file: .env
         ports:
             - "15672:15672"
-            - "5672:5672"
-        environment:
-            - RABBITMQ_PASSWORD=bitnami
+            # - "5672:5672"
+        # environment:
+        #     - RABBITMQ_PASSWORD=bitnami
 
     mongo:
         image: bitnami/mongodb:latest

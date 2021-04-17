@@ -15,4 +15,6 @@ module.exports = {
     subtractionQueue: process.env.SUBTRACTION_QUEUE,
     multiplicationQueue: process.env.MULTIPLICATION_QUEUE,
     divisionQueue: process.env.DIVISION_QUEUE,
+    logInfoQueue: process.env.LOG_INFO_QUEUE,
+    logErrorQueue: process.env.LOG_ERROR_QUEUE,
 }

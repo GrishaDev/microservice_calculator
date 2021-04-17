@@ -1,6 +1,7 @@
 const { HttpError } = require('./helpers/httpError');
 const { rabbitmqProduce } = require('./broker/rabbitmq');
 const Repository = require('./database/repository');
+const { logInfo } = require('./helpers/produceLog');
 const config = require('./config');
 class Controller {
 
@@ -22,6 +23,7 @@ class Controller {
     static async removeCalculation(req, res) {
         const { id } = req.params;
         const calculation = await Repository.removeCalculation(id);
+        logInfo(`${id} calculation was removed`);
         res.json(calculation);
     }
 
@@ -50,6 +52,7 @@ const createCalculation = async (brokerQueue, data) => {
     const calculation = await Repository.addCalculation();
     const calcId = calculation.id;
     await rabbitmqProduce(brokerQueue, {calcId, data});
+    logInfo(`${calcId} calculation was added to ${brokerQueue} queue`);
     return calculation;
 }
 
