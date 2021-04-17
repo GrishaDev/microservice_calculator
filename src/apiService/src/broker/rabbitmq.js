@@ -8,6 +8,8 @@ let channel;
 
 const connectRabbitmq = async () => {
     connection = await rabbitmq.connect(config.brokerUrl);
+    console.log(`rabbitmq connected to ${config.brokerUrl}`);
+
     channel = await connection.createChannel();
 
     await channel.assertQueue (resultsQueue, {durable: true});

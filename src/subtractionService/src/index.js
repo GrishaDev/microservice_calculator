@@ -10,6 +10,6 @@ const config = require('./config');
     }
     catch(err) {
         console.log(err);
-        process.exit(1);
+        process.exit();
     }
 })();

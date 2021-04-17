@@ -5,7 +5,13 @@ const { connectRabbitmq } = require('./broker/rabbitmq');
 const connectDb = require('./database');
 
 (async () => {
-    startApp(3000);
-    connectRabbitmq().catch(err => console.log(err));
-    connectDb();
-})()
+    try {
+        startApp(3000);
+        await connectRabbitmq().catch(err => {throw new Error('failed connecting to rabbitmq')});
+        await connectDb();
+    }
+    catch(err) {
+        console.log(err);
+        process.exit(1);
+    }
+})();

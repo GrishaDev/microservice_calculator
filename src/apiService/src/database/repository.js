@@ -6,7 +6,6 @@ class Repository {
     static async getCalculations() {
         try {
             const calculations = await schema.find({});
-            console.log(calculations);
             return calculations;
         }
         catch(err) {
@@ -18,7 +17,7 @@ class Repository {
     static async getCalculation(id) {
         try {
             const calculation = await schema.find({_id: id})
-            return calculation.toObject();
+            return calculation;
         }
         catch(err) {
             console.log(err); 

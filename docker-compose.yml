@@ -1,0 +1,55 @@
+version: '3.3'
+
+services:
+    api:
+        build: src/apiService/.
+        env_file: src/apiService/.env
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        depends_on:
+            - rabbitmq
+            - mongo
+
+    addition:
+        build: src/additionService/.
+        env_file: src/additionService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+
+    subtraction:
+        build: src/subtractionService/.
+        env_file: src/subtractionService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+
+    multiplication:
+        build: src/multiplicationService/.
+        env_file: src/multiplicationService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+
+    divison:
+        build: src/divisionService/.
+        env_file: src/divisionService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+
+    rabbitmq:
+        image: 'bitnami/rabbitmq:latest'
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        environment:
+            - RABBITMQ_PASSWORD=bitnami
+
+    mongo:
+        image: bitnami/mongodb:latest
+        restart: unless-stopped
+        # user: root
+        # volumes:
+        #     - /volume:/bitnami/mongodb/data
