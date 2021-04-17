@@ -10,6 +10,13 @@ services:
         depends_on:
             - rabbitmq
             - mongo
+    
+    auth:
+        build: src/authService/.
+        env_file: src/authService/.env
+        restart: unless-stopped
+        ports:
+            - "6200:6200"
 
     addition:
         build: src/additionService/.

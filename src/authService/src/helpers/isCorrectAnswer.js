@@ -1,0 +1,1 @@
+module.exports = (answer) => answer && answer.length === 5;
