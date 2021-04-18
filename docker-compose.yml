@@ -3,6 +3,7 @@ version: '3.3'
 services:
     api:
         build: src/apiService/.
+        image: suharik/microservice_calculator:api
         env_file: src/apiService/.env
         restart: unless-stopped
         ports:
@@ -13,6 +14,7 @@ services:
     
     auth:
         build: src/authService/.
+        image: suharik/microservice_calculator:auth
         env_file: src/authService/.env
         restart: unless-stopped
         ports:
@@ -20,6 +22,7 @@ services:
 
     logger:
         build: src/loggerService/.
+        image: suharik/microservice_calculator:logger
         env_file: src/loggerService/.env
         restart: unless-stopped
         ports:
@@ -27,6 +30,7 @@ services:
 
     addition:
         build: src/additionService/.
+        image: suharik/microservice_calculator:addition
         env_file: src/additionService/.env
         restart: unless-stopped
         depends_on:
@@ -34,6 +38,7 @@ services:
 
     subtraction:
         build: src/subtractionService/.
+        image: suharik/microservice_calculator:subtraction
         env_file: src/subtractionService/.env
         restart: unless-stopped
         depends_on:
@@ -41,6 +46,7 @@ services:
 
     multiplication:
         build: src/multiplicationService/.
+        image: suharik/microservice_calculator:multiplication
         env_file: src/multiplicationService/.env
         restart: unless-stopped
         depends_on:
@@ -48,6 +54,7 @@ services:
 
     divison:
         build: src/divisionService/.
+        image: suharik/microservice_calculator:division
         env_file: src/divisionService/.env
         restart: unless-stopped
         depends_on:

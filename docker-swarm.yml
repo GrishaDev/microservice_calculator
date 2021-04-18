@@ -1,0 +1,97 @@
+version: '3.3'
+
+services:
+    api:
+        image: suharik/microservice_calculator:api
+        env_file: src/apiService/.env
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        depends_on:
+            - rabbitmq
+            - mongo
+        deploy:
+            replicas: 2
+
+    auth:
+        image: suharik/microservice_calculator:auth
+        env_file: src/authService/.env
+        restart: unless-stopped
+        ports:
+            - "6200:6200"
+        deploy:
+            replicas: 2
+
+    logger:
+        image: suharik/microservice_calculator:logger
+        env_file: src/loggerService/.env
+        restart: unless-stopped
+        ports:
+            - "7000:7000"
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.labels.manager == 1
+
+    addition:
+        image: suharik/microservice_calculator:addition
+        env_file: src/additionService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+        deploy:
+            replicas: 2
+
+    subtraction:
+        image: suharik/microservice_calculator:subtraction
+        env_file: src/subtractionService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+        deploy:
+            replicas: 2
+
+    multiplication:
+        image: suharik/microservice_calculator:multiplication
+        env_file: src/multiplicationService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+        deploy:
+            replicas: 2
+
+    divison:
+        image: suharik/microservice_calculator:division
+        env_file: src/divisionService/.env
+        restart: unless-stopped
+        depends_on:
+            - rabbitmq
+        deploy:
+            replicas: 2
+
+    rabbitmq:
+        image: 'bitnami/rabbitmq:latest'
+        env_file: .env
+        ports:
+            - "15672:15672"
+            # - "5672:5672"
+        # environment:
+        #     - RABBITMQ_PASSWORD=bitnami
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.labels.manager == 1
+
+    mongo:
+        image: bitnami/mongodb:latest
+        restart: unless-stopped
+        # user: root
+        # volumes:
+        #     - /volume:/bitnami/mongodb/data
+        deploy:
+            replicas: 1
+            placement:
+                constraints:
+                    - node.labels.manager == 1
